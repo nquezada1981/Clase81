@@ -35,9 +35,33 @@ app.post("/v1/movies", async (req, res)=>{
      res.status(201).json(await movie.crear(req.body.name));
 })
 
+app.delete("/v1/movies/:id", async(req,res)=>{
+    const resultado = await movie.eliminar(req.params.id);
+    //punto 6
+    if(!resultado ){ // resultado==0 // !(resultado==1) //resultado==0?res.sendStatus(404):res.sendStatus(200)
+        res.sendStatus(404);
+    }else{
+        res.sendStatus(200);
+    }    
+})
 
 app.get("/v1/libros", async (req,res)=>{
     res.json(await libro.listarTodo());
+})
+
+app.put("/v1/movies/:id", async(req, res)=>{
+    
+    if(req.body.name){
+         const resultado =  await movie.actualizar(req.body, req.params.id)
+        if(!resultado ){ // resultado==0 // !(resultado==1) //resultado==0?res.sendStatus(404):res.sendStatus(200)
+            res.sendStatus(202);
+        }else{
+            res.sendStatus(200);
+        }
+    }else{
+        res.sendStatus(400);
+    }
+   
 })
 
 app.listen(3000, ()=>{console.log("Levantado puerto 3000")});

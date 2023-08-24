@@ -23,8 +23,21 @@ export class Movie{
 
     async listarId(id){
         //punto 3
-        const resultado = await pool.query("select id, name, created_at, updated_at from Movies where id = $1", [id]);
+        const resultado = await pool.query("select id, name, created_at, updated_at from movies where id = $1", [id]);
         pool.release;
         return resultado.rows;
+    }
+    async eliminar(id){
+
+        const resultado = await pool.query("delete from movies where id = $1", [id]);
+        pool.release;
+        return resultado.rowCount;
+
+    }
+
+    async actualizar(name, id){
+        const resultado = await pool.query("update movies set name=$2, updated_at= now() where id = $1", [id, name]);
+        pool.release;
+        return resultado.rowCount;
     }
 }
