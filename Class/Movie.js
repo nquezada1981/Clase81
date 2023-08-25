@@ -40,4 +40,8 @@ export class Movie{
         pool.release;
         return resultado.rowCount;
     }
+
+    async destroy(){
+        pool.close
+    }
 }

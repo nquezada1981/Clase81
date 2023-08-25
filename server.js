@@ -2,6 +2,9 @@
 //punto 13
 import express from "express";
 import fs from "fs";
+import cors from "cors"
+import morgan from "morgan";
+
 //punto 14 uso de estructura de carpetas
 import { Movie } from "./Class/Movie.js"
 import { Libro } from "./Class/Libro.js";
@@ -11,7 +14,22 @@ const app = express();
 const movie = new Movie();
 const libro = new Libro();
 
+
 app.use(express.json());
+app.use(cors());
+//app.use(morgan("combined"));
+
+app.param('id',(req,res,next,id)=>{
+    if(id <0){  
+        console.log(`id fuera de rango`);
+        res.sendStatus(404);
+      
+    }else{
+        console.log(`id dentro de rango`);
+        next();
+    }
+    
+})
 
 //punto 20
 app.get("/v1/movies", async (req, res) => {
@@ -62,6 +80,15 @@ app.put("/v1/movies/:id", async(req, res)=>{
         res.sendStatus(400);
     }
    
+})
+
+app.get("/apagar", (req,res)=>{
+    movie.destroy();
+    res.send("Conexion terminado")
+})
+
+app.use('*',(req,res)=>{
+    res.send("ruta no existe")
 })
 
 app.listen(3000, ()=>{console.log("Levantado puerto 3000")});
